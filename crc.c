@@ -50,13 +50,15 @@ void BuildRollingCRCTable (const unsigned CRCTable[256], unsigned RollingCRCTabl
         x = init_CRC(); 
         y = init_CRC(); 
         x = update_CRC(x,CRCTable,c);
-        for(i=0;i<WINSIZE;i++) 
+        y = update_CRC(y,CRCTable,0);
+        for(i=0;i<WINSIZE-1;i++) 
         { 
             x = update_CRC(x,CRCTable,0);
             y = update_CRC(y,CRCTable,0);
         } 
-        RollingCRCTable[c] = finish_CRC(x) ^ finish_CRC(y); 
-    } 
+        x = update_CRC(x,CRCTable,0);
+        RollingCRCTable[c] = x ^ y;
+    }
 }
 
 int main()
@@ -115,8 +117,13 @@ int main()
   // Let's calc CRC(buffer+TESTSIZE,WINSIZE) in two ways
   crc1 = calcCRC(buffer+TESTSIZE,WINSIZE,CRCTab);
   crc2 = calcCRC(buffer,WINSIZE,CRCTab);
+  crc2 = finish_CRC(crc2);
   for (i=0; i<TESTSIZE; i++)
-    crc2 = update_CRC(crc2,CRCTab,buffer[WINSIZE+i]) ^ RollingCRCTab[buffer[i]];
+  {
+    crc2 = update_CRC(crc2,CRCTab,buffer[WINSIZE+i]) ^
+      RollingCRCTab[buffer[i]];
+  }
+  crc2 = finish_CRC(crc2);
   printf("roll: %08x and %08x %s\n", crc1, crc2, crc1==crc2? "are equal":"ARE NOT EQUAL!");
   return 0;
 }
