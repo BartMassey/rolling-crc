@@ -61,7 +61,8 @@ void BuildRollingCRCTable (const unsigned CRCTable[256], unsigned RollingCRCTabl
 
 int main()
 {
-  unsigned i, j, r, CRCTab[256], FastCRCTab[256], RollingCRCTab[256], crc1, crc2;
+  unsigned i, j, r, CRCTab[256],
+      FastCRCTab[256], RollingCRCTab[256], SlowRollingCRCTab[256], crc1, crc2;
  
   // Fast CRC table construction
   FastTableBuild (FastCRCTab, kCrcPoly);
@@ -91,10 +92,10 @@ int main()
   }
 
   // Check slow rolling CRC build.
-  BuildRollingCRCTable(FastCRCTab, RollingCRCTab);
+  BuildRollingCRCTable(FastCRCTab, SlowRollingCRCTab);
   for (i=0; i<256; i++)
-    if (FastCRCTab[i] != RollingCRCTab[i])   // unit testing :)
-      printf("sr-crc: *%02x %08x %08x\n",i,FastCRCTab[i],RollingCRCTab[i]);
+    if (RollingCRCTab[i] != SlowRollingCRCTab[i])   // unit testing :)
+      printf("sr-crc: *%02x %08x %08x\n",i,RollingCRCTab[i],SlowRollingCRCTab[i]);
 
   // Fast table construction for rolling CRC
   FastTableBuild (FastCRCTab, RollingCRCTab[128]);
