@@ -74,7 +74,7 @@ int main()
       r = (r >> 1) ^ (kCrcPoly & ~((r & 1) - 1));
     CRCTab[i] = r;
     if (FastCRCTab[i] != CRCTab[i])   // unit testing :)
-      printf("%02x %08x %08x\n", i, r, (r & 1) ? (r>>1)^kCrcPoly : (r>>1));
+      printf("c-crc: %02x %08x %08x\n", i, r, (r & 1) ? (r>>1)^kCrcPoly : (r>>1));
   }
  
  
@@ -87,20 +87,20 @@ int main()
     for (j=0; j<WINSIZE; j++)
       crc = update_CRC(crc,CRCTab,0);
     RollingCRCTab[i] = finish_CRC(crc);
-//    printf("+%02x %08x %08x\n",i,r, (r & 1) ? (r>>1)^kCrcPoly : (r>>1));
+//    printf("r-crc: %02x %08x %08x\n",i,r, (r & 1) ? (r>>1)^kCrcPoly : (r>>1));
   }
 
   // Check slow rolling CRC build.
   BuildRollingCRCTable(FastCRCTab, RollingCRCTab);
   for (i=0; i<256; i++)
     if (FastCRCTab[i] != RollingCRCTab[i])   // unit testing :)
-      printf("*%02x %08x %08x\n",i,FastCRCTab[i],RollingCRCTab[i]);
+      printf("sr-crc: *%02x %08x %08x\n",i,FastCRCTab[i],RollingCRCTab[i]);
 
   // Fast table construction for rolling CRC
   FastTableBuild (FastCRCTab, RollingCRCTab[128]);
   for (i=0; i<256; i++)
     if (FastCRCTab[i] != RollingCRCTab[i])   // unit testing :)
-      printf("*%02x %08x %08x\n",i,FastCRCTab[i],RollingCRCTab[i]);
+      printf("fr-crc: %02x %08x %08x\n",i,FastCRCTab[i],RollingCRCTab[i]);
 
 #else
   BuildRollingCRCTable(FastCRCTab, RollingCRCTab);
@@ -116,6 +116,6 @@ int main()
   crc2 = calcCRC(buffer,WINSIZE,CRCTab);
   for (i=0; i<TESTSIZE; i++)
     crc2 = update_CRC(crc2,CRCTab,buffer[WINSIZE+i]) ^ RollingCRCTab[buffer[i]];
-  printf("%08x and %08x %s\n", crc1, crc2, crc1==crc2? "are equal":"ARE NOT EQUAL!");
+  printf("roll: %08x and %08x %s\n", crc1, crc2, crc1==crc2? "are equal":"ARE NOT EQUAL!");
   return 0;
 }
