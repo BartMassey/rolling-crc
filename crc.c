@@ -1,6 +1,7 @@
 /* crc.c -- Fast CRC table construction and rolling CRC hash calculation
 2009-11-23 : Igor Pavlov : Public domain
-2013-03-27 : Bulat.Ziganshin@gmail.com : Public domain */
+2013-03-27 : Bulat.Ziganshin@gmail.com : Public domain
+2018-05-26 : Bart Massey <bart.massey@gmail.com> : Public domain */
  
 #include <stdio.h>
  
