@@ -1,6 +1,6 @@
 # Rolling CRC
 2009 Igor Pavlov  
-2013 Bulat Ziganshin
+2013 Bulat Ziganshin  
 2018 Bart Massey
 
 This code by Bulat Zighansin *et al* is from this thread
